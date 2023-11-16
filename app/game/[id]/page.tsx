@@ -89,6 +89,15 @@ export default async function Game({ params }: { params: { id: number } }) {
       redirect(`/game/${params.id}?error=Invalid%20number`);
     }
     const fxd = parseFloat(parsed.data.number.toFixed(2));
+    // supabase function
+    // BEGIN
+    //   UPDATE games
+    //   SET pool = pool + amount
+    //   WHERE id = game_id AND active = true AND period = perio;
+    //   IF NOT FOUND THEN
+    //     RAISE EXCEPTION 'Update failed because game is not active';
+    //   END IF;
+    // END;
     const { error: poolError } = await supabaseServerRole.rpc("addpool", {
       amount: fxd,
       game_id: params.id,

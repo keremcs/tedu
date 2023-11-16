@@ -24,7 +24,7 @@ export const metadata = {
 
 export default async function Admin() {
   const user = await currentUser();
-  if (!user || user.id !== "user_2YGh2CbZELEGIWfy5W9PEOdtJbO") {
+  if (!user || user.id !== "user_2YGm23aFJmosEvgqkEYXdKp21nD") {
     redirect("/");
   }
 
@@ -59,6 +59,12 @@ export default async function Admin() {
 
     const perPlayer = (poo * 2) / count;
     const fxd = parseFloat(perPlayer.toFixed(2));
+    // supabase function
+    // BEGIN
+    //   UPDATE players
+    //   SET balance = balance + amount
+    //   WHERE game = game_id;
+    // END;
     const { error: poolError } = await supabaseRoleP.rpc("poolfn", {
       amount: fxd,
       game_id: game,
