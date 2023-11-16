@@ -3,7 +3,11 @@ import { Button } from "@/components/ui/button";
 import Hamburger from "@/components/Hamburger";
 import JoinGame from "@/components/JoinGame";
 
-export default function Index() {
+export const metadata = {
+  title: "Enter Game PIN",
+};
+
+export default function Enter() {
   return (
     <main className="min-h-screen flex flex-col">
       <div className="flex flex-row justify-center border-b h-[57px]">

@@ -1,9 +1,11 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
 import Hamburger from "@/components/Hamburger";
-import JoinGame from "@/components/JoinGame";
+import Comp from "@/components/Comp";
 
-export default function Index() {
+export const metadata = {
+  title: "Compare Payment Plans",
+};
+
+export default function Compare() {
   return (
     <main className="min-h-screen flex flex-col">
       <div className="flex flex-row justify-center border-b h-[57px]">
@@ -14,20 +16,11 @@ export default function Index() {
           <a href="/" className="hidden sm:flex text-3xl font-bold">
             TEDU Games
           </a>
-          <div className="flex w-[90px] justify-end">
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button size={"sm"}>Sign in</Button>
-              </SignInButton>
-            </SignedOut>
-          </div>
+          <div className="flex w-[90px]"></div>
         </div>
       </div>
       <div className="flex grow justify-center">
-        <JoinGame />
+        <Comp />
       </div>
     </main>
   );

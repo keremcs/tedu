@@ -1,9 +1,9 @@
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
+import CBGame from "@/components/CBGame";
 import Hamburger from "@/components/Hamburger";
-import JoinGame from "@/components/JoinGame";
+import { Button } from "@/components/ui/button";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
 
-export default function Index() {
+export default function CBIndex() {
   return (
     <main className="min-h-screen flex flex-col">
       <div className="flex flex-row justify-center border-b h-[57px]">
@@ -16,10 +16,10 @@ export default function Index() {
           </a>
           <div className="flex w-[90px] justify-end">
             <SignedIn>
-              <UserButton afterSignOutUrl="/" />
+              <UserButton afterSignOutUrl="/cbgame" />
             </SignedIn>
             <SignedOut>
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" afterSignInUrl="/cbgame">
                 <Button size={"sm"}>Sign in</Button>
               </SignInButton>
             </SignedOut>
@@ -27,7 +27,7 @@ export default function Index() {
         </div>
       </div>
       <div className="flex grow justify-center">
-        <JoinGame />
+        <CBGame />
       </div>
     </main>
   );
