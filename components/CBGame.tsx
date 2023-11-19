@@ -128,10 +128,7 @@ function DataTable(props: {
             <td>{props.i0}%</td>
             <td>{props.o0 ?? 0}%</td>
           </tr>
-          {(props.p === 2 ||
-            props.p === 3 ||
-            props.p === 4 ||
-            props.p === 5) && (
+          {props.p > 1 && (
             <tr>
               <td>1</td>
               <td className={props.hidden}>{props.r1}%</td>
@@ -139,7 +136,7 @@ function DataTable(props: {
               <td className={props.hidden}>{props.o1}%</td>
             </tr>
           )}
-          {(props.p === 3 || props.p === 4 || props.p === 5) && (
+          {props.p > 2 && (
             <tr className="bg-secondary">
               <td>2</td>
               <td className={props.hidden}>{props.r2}%</td>
@@ -147,7 +144,7 @@ function DataTable(props: {
               <td className={props.hidden}>{props.o2}%</td>
             </tr>
           )}
-          {(props.p === 4 || props.p === 5) && (
+          {props.p > 3 && (
             <tr>
               <td>3</td>
               <td className={props.hidden}>{props.r3}%</td>
