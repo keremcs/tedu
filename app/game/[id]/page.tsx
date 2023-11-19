@@ -23,10 +23,18 @@ export default async function Game({ params }: { params: { id: number } }) {
   const supabaseRole = serviceClient();
   const { data: game, error: gameError } = await supabaseRole
     .from("games")
-    .select("active, period, logs (amount, period, player)")
+    .select("active, period")
     .eq("id", params.id);
   if (gameError) {
     redirect(`/game?error=${gameError.message}`);
+  }
+  const { data: logs, error: logError } = await supabaseRole
+    .from("logs")
+    .select("amount, period")
+    .eq("game", params.id)
+    .eq("player", plain);
+  if (logError) {
+    redirect(`/game?error=${logError.message}`);
   }
   if (game.length === 0) {
     return (
@@ -130,7 +138,7 @@ export default async function Game({ params }: { params: { id: number } }) {
   }
 
   if (!game[0].active) {
-    const g = game[0].logs.filter((u) => u.player === plain && u.period === 0);
+    const g = logs.filter((u) => u.period === 0);
     const c = g[0]?.amount ?? 0;
     const r = 10 - c;
     const w = balance - r;
@@ -175,11 +183,7 @@ export default async function Game({ params }: { params: { id: number } }) {
     );
   }
 
-  if (
-    game[0].logs
-      .filter((u) => u.player === plain)
-      .some((p) => p.period === game[0].period)
-  )
+  if (logs.some((p) => p.period === game[0].period))
     return (
       <main className="min-h-screen flex flex-col">
         <div className="flex flex-row justify-center border-b h-[57px]">
