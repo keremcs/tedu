@@ -219,7 +219,7 @@ function Game(props: { mg: boolean }) {
   }
 
   const getData = async (from: string) => {
-    await fetch(from, { next: { tags: [from] } })
+    await fetch(from)
       .then((res) => res.json())
       .then((j) => setBoard(j.data));
   };

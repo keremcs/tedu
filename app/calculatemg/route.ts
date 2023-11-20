@@ -1,7 +1,6 @@
 import { currentUser } from "@clerk/nextjs";
 import { serviceClient } from "@/utils/supabase/service";
 import { NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
 
 type Board =
   | {
@@ -94,8 +93,6 @@ export async function POST(request: Request) {
           }
         );
       }
-
-      revalidateTag("/leaderboardmg");
 
       return NextResponse.json(
         { text: "Great Work!" },
