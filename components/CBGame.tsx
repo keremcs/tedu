@@ -219,7 +219,7 @@ function Game(props: { mg: boolean }) {
   }
 
   const getData = async (from: string) => {
-    await fetch(from)
+    await fetch(from, { next: { tags: [from] } })
       .then((res) => res.json())
       .then((j) => setBoard(j.data));
   };
@@ -546,7 +546,6 @@ function Game(props: { mg: boolean }) {
                   setInflation4(data.tinf);
                   setOg4(data.tog);
                   result(data.tinf, data.tog);
-                  setPeriod(5);
                 }
               }}
               autoFocus
@@ -559,7 +558,6 @@ function Game(props: { mg: boolean }) {
                 setInflation4(data.tinf);
                 setOg4(data.tog);
                 result(data.tinf, data.tog);
-                setPeriod(5);
               }}
             >
               Next
