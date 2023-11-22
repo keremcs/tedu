@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { calculate } from "@/app/calculate";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import toast, { Toaster } from "react-hot-toast";
 import dayjs from "dayjs";
@@ -199,7 +200,6 @@ function Game(props: { mg: boolean }) {
     const rand = parseFloat((Math.random() * 10).toFixed(2));
     const imin1 = rand < 1 ? 1 : rand;
     setInflation0(imin1);
-    setRate0(imin1);
   };
 
   function irFormula(r: number, i: number) {
@@ -222,63 +222,6 @@ function Game(props: { mg: boolean }) {
     await fetch(from)
       .then((res) => res.json())
       .then((j) => setBoard(j.data));
-  };
-
-  const postData = async (
-    s: number,
-    i0: number,
-    i1: number,
-    i2: number,
-    i3: number,
-    i4: number,
-    o0: number,
-    o1: number,
-    o2: number,
-    o3: number,
-    o4: number,
-    r1: number,
-    r2: number,
-    r3: number,
-    r4: number
-  ) => {
-    let where = props.mg ? "/calculatemg" : "/calculate";
-    await fetch(where, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        s,
-        i0,
-        i1,
-        i2,
-        i3,
-        i4,
-        o0,
-        o1,
-        o2,
-        o3,
-        o4,
-        r1,
-        r2,
-        r3,
-        r4,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.text === "Great Work!") {
-          toast(data.text, {
-            icon: "👏",
-          });
-          const timeout = setTimeout(() => {
-            getData(props.mg ? "/leaderboardmg" : "/leaderboard");
-          }, 1000);
-          return () => clearTimeout(timeout);
-        } else {
-          toast.error(data.text);
-        }
-      });
   };
 
   const result = (inf: number, og: number) => {
@@ -313,23 +256,39 @@ function Game(props: { mg: boolean }) {
     setBestScore(findBestScore);
 
     if (board && board.some((s) => s.score < done)) {
-      postData(
-        done,
-        inflation0,
-        inflation1,
-        inflation2,
-        inflation3,
-        inf,
-        og0,
-        og1,
-        og2,
-        og3,
-        og,
-        rate1,
-        rate2,
-        rate3,
-        rate4
-      );
+      const toastId = toast.loading("Sending");
+      calculate(props.mg, {
+        s: done,
+        i0: inflation0,
+        i1: inflation1,
+        i2: inflation2,
+        i3: inflation3,
+        i4: inf,
+        o0: og0,
+        o1: og1,
+        o2: og2,
+        o3: og3,
+        o4: og,
+        r1: rate1,
+        r2: rate2,
+        r3: rate3,
+        r4: rate4,
+      }).then((data) => {
+        if (data.message === "Great Work!") {
+          toast("Great Work!", {
+            id: toastId,
+            icon: "👏",
+          });
+          const timeout = setTimeout(() => {
+            getData(props.mg ? "/leaderboardmg" : "/leaderboard");
+          }, 1000);
+          return () => clearTimeout(timeout);
+        } else {
+          toast.error(data.message, {
+            id: toastId,
+          });
+        }
+      });
     }
 
     return setPeriod(5);
@@ -343,7 +302,7 @@ function Game(props: { mg: boolean }) {
             version={props.mg ? "Money Growth" : "Nominal Interest Rate"}
             p={period}
             i0={inflation0}
-            r0={rate0}
+            r0={props.mg ? inflation0 : rate0}
             o0={og0}
           />
           {!props.mg && (
@@ -406,7 +365,7 @@ function Game(props: { mg: boolean }) {
             i1={inflation1}
             o0={og0}
             o1={og1}
-            r0={rate0}
+            r0={props.mg ? inflation0 : rate0}
             r1={rate1}
           />
           <div className="text-red-500 md:text-2xl">
@@ -461,7 +420,7 @@ function Game(props: { mg: boolean }) {
             o0={og0}
             o1={og1}
             o2={og2}
-            r0={rate0}
+            r0={props.mg ? inflation0 : rate0}
             r1={rate1}
             r2={rate2}
           />
@@ -519,7 +478,7 @@ function Game(props: { mg: boolean }) {
             o1={og1}
             o2={og2}
             o3={og3}
-            r0={rate0}
+            r0={props.mg ? inflation0 : rate0}
             r1={rate1}
             r2={rate2}
             r3={rate3}
@@ -580,7 +539,7 @@ function Game(props: { mg: boolean }) {
             o2={og2}
             o3={og3}
             o4={og4}
-            r0={rate0}
+            r0={props.mg ? inflation0 : rate0}
             r1={rate1}
             r2={rate2}
             r3={rate3}
