@@ -281,7 +281,7 @@ function Game(props: { mg: boolean }) {
           });
           const timeout = setTimeout(() => {
             getData(props.mg ? "/leaderboardmg" : "/leaderboard");
-          }, 1000);
+          }, 1777);
           return () => clearTimeout(timeout);
         } else {
           toast.error(data.message, {
